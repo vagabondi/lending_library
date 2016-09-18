@@ -1,6 +1,6 @@
 <?php
 
-class Book {
+class Book implements JsonSerializable {
     private $id;
     private $title;
     private $author;
@@ -18,6 +18,13 @@ class Book {
         $this->author='';
         $this->description='';
         $this->conn = $conn;
+    }
+
+    function jsonSerialize()
+    {
+        return ['$title'=>$this->getTitle(),
+                'author'=>$this->getAuthor(),
+                'description'=>$this->getDescription()];
     }
 
     /**
@@ -84,21 +91,30 @@ class Book {
         $this->description = $description;
     }
 
-    public function loadFromDB ($id) {
+    public function load ($id) {
+        $conn = $this->conn;
+        $sql = "SELECT * FROM book WHERE id='$id'";
+        $result = mysqli_query($conn, $sql);
+        if($result->num_rows>0) {
+            while($row = $result->fetch_assoc()) {
+                $this->setTitle($row['title']);
+                $this->setAuthor($row['author']);
+                $this->setDescription($row['description']);
+            }
+        } else {
+            throw new Exception('Nie ma takiej książki');
+        }
+    }
+
+    public function create ($title, $author, $description) {
 
     }
 
-    public function create ($title, $author) {
+    public function update ($id) {
 
     }
 
-    public function update ($title, $author) {
+    public function delete ($id) {
 
     }
-
-    public function deleteFromDB() {
-
-    }
-
-
 }
