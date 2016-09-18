@@ -1,0 +1,2 @@
+<?php
+$dbConn->close();
