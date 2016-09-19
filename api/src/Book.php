@@ -58,6 +58,9 @@ class Book implements JsonSerializable {
      */
     public function setTitle($title)
     {
+        if(strlen($title)===0) {
+            return false;
+        }
         $this->title = $title;
     }
 
@@ -74,6 +77,9 @@ class Book implements JsonSerializable {
      */
     public function setAuthor($author)
     {
+        if(strlen($author)===0) {
+            return false;
+        }
         $this->author = $author;
     }
 
@@ -90,6 +96,9 @@ class Book implements JsonSerializable {
      */
     public function setDescription($description)
     {
+        if(strlen($description)===0 || strlen($description)>=300) {
+            return false;
+        }
         $this->description = $description;
     }
 
@@ -109,7 +118,19 @@ class Book implements JsonSerializable {
     }
 
     public function create ($title, $author, $description) {
+        $message = 'Ksiazka zostala dodana';
+        $this->setTitle($title);
+        $this->setAuthor($author);
+        $this->setDescription($description);
 
+        if( $this->setTitle($title) == false ||
+            $this->setAuthor($author) == false ||
+            $this->setDescription($description) == false ) {
+            $message = 'Blad podczas dodawania ksiazki, sprawdz poprawnosc danych';
+        }
+
+        $conn = $this->conn;
+        $sql = "INSERT INTO book ";
     }
 
     public function update ($id) {

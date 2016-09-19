@@ -15,6 +15,10 @@ $getIds = function($dbConn) {
     }
 };
 
+$escString = function ($dbConn, $param) {
+    return mysqli_real_escape_string($dbConn, $param);
+};
+
 if($_SERVER['REQUEST_METHOD']==='GET') {
     if(isset($_GET['id'])) {
         $book = new Book($dbConn);
@@ -33,5 +37,13 @@ if($_SERVER['REQUEST_METHOD']==='GET') {
         echo json_encode($objects);
     }
 
+} elseif($_SERVER['REQUEST_METHOD']==='POST') {
+    $book = new Book($dbConn);
+    $title = $escString($dbConn, $_POST['title']);
+    $author = $escString($dbConn, $_POST['author']);
+    $description = $escString($dbConn, $_POST['description']);
+
+    $book->create($title, $author, $description);
 }
 
+require_once ('src/foot.inc.php');

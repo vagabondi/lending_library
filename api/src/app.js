@@ -1,6 +1,6 @@
 $(document).ready(function () {
-    var div = $('#book'),
-        list = div.find('ul');
+    var list = $('#book');
+
 
 
     $.ajax({
@@ -10,31 +10,36 @@ $(document).ready(function () {
     })
         .done(function (objects) {
             $.each(objects, function (index, value) {
-                var li = $("<li>"),
+                var bookTitle = $("<div>"),
                     a = $("<a>");
-                li.appendTo(list);
-                a.appendTo(li);
+                bookTitle.appendTo(list);
+                a.appendTo(bookTitle);
                 a.text(value.title);
                 a.attr('href', 'api/books.php?id=' + index);
+
             });
             var links = $('a');
             links.each(function(index, value) {
                 $(this).on('click', function (event) {
                     event.preventDefault();
+                    var link = $(this);
                     $.ajax({
                         url: $(this).attr('href'),
                         type: 'GET',
                         dataType: "json"
                     })
                         .done(function(obj) {
-                            list.empty();
-                            list.remove();
-                            var info = $('<p>');
-                            info.appendTo(div);
-                            info.text(obj.title);
+                            if(!link.next().hasClass('info')) {
+                                var info = $("<div>");
+                                info.insertAfter(link);
+                                info.addClass('info');
+                                info.html('Author: ' + obj.author + '<br /><br />' + obj.description);
+                            } else {
+                                link.next().remove();
+                            }
                         })
                         .fail(function () {
-                            console.log('NIe udało się!');
+                            console.log('Nie udało się!');
                         })
                 });
             });
@@ -42,8 +47,4 @@ $(document).ready(function () {
         .fail(function () {
             console.log('fail');
         });
-
-
-
-
 });
