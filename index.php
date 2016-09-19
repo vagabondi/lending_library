@@ -9,6 +9,7 @@
     <div id="book">
     </div>
     <script src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="api/src/jquery.validate.js" type="text/javascript"></script>
     <script type="text/javascript" src="api/src/app.js"></script>
 </body>
 </html>

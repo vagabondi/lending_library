@@ -1,3 +1,4 @@
 .idea/
 test/
 api/src/config/config.php
+node_modules/
