@@ -22,9 +22,11 @@ class Book implements JsonSerializable {
 
     function jsonSerialize()
     {
-        return ['$title'=>$this->getTitle(),
+        return [
+                'title'=>$this->getTitle(),
                 'author'=>$this->getAuthor(),
-                'description'=>$this->getDescription()];
+                'description'=>$this->getDescription()
+        ];
     }
 
     /**
