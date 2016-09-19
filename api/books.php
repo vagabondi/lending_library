@@ -15,20 +15,23 @@ $getIds = function($dbConn) {
     }
 };
 
-if($_SERVER['REQUEST_METHOD']==='GET' && !isset($_GET['id'])) {
-    $ids = $getIds($dbConn);
-    $objects = [];
-    foreach ($ids as $value) {
+if($_SERVER['REQUEST_METHOD']==='GET') {
+    if(isset($_GET['id'])) {
         $book = new Book($dbConn);
-        $book->load($value);
-        $objects[] = $book->jsonSerialize();
+        $id = (int)$_GET['id'];
+        $book->load($id);
+        echo json_encode($book);
+    } else {
+        $ids = $getIds($dbConn);
+        $objects = [];
+        foreach ($ids as $value) {
+            $book = new Book($dbConn);
+            $book->load($value);
+            $objects[$value] = $book;
+        }
+
+        echo json_encode($objects);
     }
 
 }
 
-elseif(isset($_GET['id'])) {
-    $book = new Book($dbConn);
-    $id = (int)$_GET['id'];
-    $book->load($id);
-    echo json_encode($book);
-}
